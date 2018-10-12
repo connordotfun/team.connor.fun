@@ -12,15 +12,5 @@ members : List Profile
 members = 
   [ Profile "maxine" "Maxine Hartnett" "Chief E Officer"
   , Profile "ethan" "Ethan Hunter" "Chief Expostulation Officer"
-  , Profile "ethan" "this person has an excessively long name" "Chief Expostulation Officer"
-  , Profile "ethan" "Ethan Hunter" "Chief Expostulation Officer"
-  , Profile "ethan" "Ethan Hunter" "Chief Expostulation Officer"
-  , Profile "ethan" "this person has an excessively long name" "Chief Expostulation Officer"
-  , Profile "ethan" "Ethan Hunter" "Chief Expostulation Officer"
-  , Profile "ethan" "Ethan Hunter" "Chief Expostulation Officer"
-  , Profile "ethan" "this person has an excessively long name" "Chief Expostulation Officer"
-  , Profile "ethan" "Ethan Hunter" "Chief Expostulation Officer"
-  , Profile "ethan" "Ethan Hunter" "Chief Expostulation Officer"
-  , Profile "ethan" "this person has an excessively long name" "Chief Expostulation Officer"
-  , Profile "ethan" "Ethan Hunter" "Chief Expostulation Officer"
+  , Profile "ellen" "Ellen Roberts" "Chief Ellen Officer"
   ]
