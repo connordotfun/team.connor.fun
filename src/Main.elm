@@ -36,11 +36,7 @@ update : Msg -> Model -> Model
 update msg model =
   case msg of
     ProfileClicked p ->
-      case model.selectedProfile of --if the user clicks anywhere off the bio, they are asking for exit
-        Just _ ->
-          update BioExit model
-        Nothing ->
-          {model | selectedProfile = Just p}
+      {model | selectedProfile = Just p}
     
     BioExit ->
       {model | selectedProfile = Nothing}
@@ -66,9 +62,8 @@ viewBio : Maybe Profile -> Html Msg
 viewBio selectedProfile =
   case selectedProfile of
     Just profile ->
-
       div [class "bio-container-container"]
-      [ div [ class "bio-container-background"] []
+      [ div [ class "bio-container-background", onClick BioExit] []
       , div [ class "bio-container", style "visibility" "visible" ] 
           [ div [class "bio-close-btn", onClick BioExit] [text "×"]
 
