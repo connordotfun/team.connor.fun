@@ -3,7 +3,7 @@ module Profile exposing (..)
 import Browser
 import Html exposing (Html, div, text, img)
 import Html.Attributes exposing (class, src)
-import Html.Events exposing (onMouseEnter, onMouseLeave)
+import Html.Events exposing (onMouseEnter, onMouseLeave, onClick)
 
 type alias Profile = 
   { imageName: String
@@ -15,14 +15,15 @@ type alias Profile =
 type Msg 
   = StartHover Profile
   | EndHover Profile
+  | Clicked Profile 
 
-
-view : Profile -> Html Msg
-view profile = 
+view : Profile -> (() -> Msg) -> Html Msg
+view profile clickHandler = 
   div
     [ class "profile"
     , onMouseEnter (StartHover profile) 
     , onMouseLeave (EndHover profile)
+    , onClick (Clicked profile)
     ]
     [ div [class "profile-inner"] 
       [ div [ class "profile-image" ][ img [src "res/connor-nologo.jpg"][] ]
@@ -30,4 +31,15 @@ view profile =
       , div [ class "profile-title" ][ text profile.personTitle ]
       ]
     ]
-    
+
+  
+update : Profile -> Msg -> Profile
+update profile msg =
+  case msg of 
+    StartHover p ->
+      profile
+    EndHover p ->
+      profile
+    Clicked p ->
+      profile -- hmmm, this is illegal state...
+  
