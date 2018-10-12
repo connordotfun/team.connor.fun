@@ -14,4 +14,5 @@ members =
   , Profile "ethan" "Ethan Hunter" "Chief Expostulation Officer"
   , Profile "ellen" "Ellen Roberts" "Chief Ellen Officer"
   , Profile "nietzsche" "Friedrich Nietzsche" "Chief Existentialism Officer"
+  , Profile "kevin" "Kevin \"Y2K\" Yang" "Chief Exotic Officer"
   ]
