@@ -82,7 +82,9 @@
   height: 100%;
 }
 
-@media only screen and (max-width: 600px), only screen and (max-height: 600px) {
+
+/*TODO: In mobile landscape mode, use a two column view */
+@media only screen and (max-width: 640px), only screen and (max-height: 640px) {
   .team-people {
     display: grid;
     grid-template-columns: 100%;
