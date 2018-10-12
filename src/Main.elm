@@ -42,12 +42,12 @@ view model =
     , div [ class "team-people"] (viewProfiles members)
     ]
 
-  
-
 
 profileMsgToMsg : Html Profile.Msg -> Html Msg
 profileMsgToMsg = 
   Html.map (\msg -> ProfileMsg msg)
+
+
 
 viewProfiles : List Profile -> List (Html Msg)
 viewProfiles = 

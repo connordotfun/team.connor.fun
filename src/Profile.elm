@@ -23,8 +23,11 @@ view profile =
     [ class "profile"
     , onMouseEnter (StartHover profile) 
     , onMouseLeave (EndHover profile)
-    ] 
-    [ div [ class "profile image" ][ img [src "res/connor.jpg"][] ]
-    , div [ class "profile name" ][ text profile.personName ]
-    , div [ class "profile title" ][ text profile.personTitle ]
     ]
+    [ div [class "profile-inner"] 
+      [ div [ class "profile-image" ][ img [src "res/connor-nologo.jpg"][] ]
+      , div [ class "profile-name" ][ text profile.personName ]
+      , div [ class "profile-title" ][ text profile.personTitle ]
+      ]
+    ]
+    
