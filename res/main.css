@@ -1,0 +1,56 @@
+#body {
+  width: 100vw;
+  height: 100vh;
+}
+
+.content {
+  display: grid;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  grid-template-columns: 100%;
+  grid-template-rows: min-content min-content 35% min-content 30%;
+}
+
+.page-title {
+  grid-row: 1;
+  font-size: 55px;
+  padding-bottom: 10px;
+  text-align: center;
+}
+
+.important-people-title {
+  grid-row: 2;
+  font-size: 50px;
+  text-align: center;
+}
+
+.important-people {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 100%;
+
+  grid-row: 3 / span 1;
+
+}
+
+.team-people-title {
+  grid-row: 4;
+  font-size: 50px;
+  text-align: center;
+}
+
+.team-people {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-auto-rows: 100%;
+  grid-row: 5;
+}
+
+@media only screen and (max-width: 600px) {
+  .team-people {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+

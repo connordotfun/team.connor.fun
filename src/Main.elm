@@ -1,6 +1,10 @@
 import Browser
 import Html exposing (Html, button, div, text)
 import Html.Events exposing (onClick)
+import Html.Attributes exposing (class)
+import Profile exposing (Profile)
+import TeamMembers exposing (cofounders, members)
+import List
 
 
 main =
@@ -18,24 +22,33 @@ init =
 
 -- UPDATE
 
-type Msg = Increment | Decrement
+type Msg 
+  = ProfileMsg Profile.Msg 
 
 update : Msg -> Model -> Model
 update msg model =
-  case msg of
-    Increment ->
-      model + 1
-
-    Decrement ->
-      model - 1
+  model
 
 
 -- VIEW
 
 view : Model -> Html Msg
 view model =
-  div []
-    [ button [ onClick Decrement ] [ text "-" ]
-    , div [] [ text (String.fromInt model) ]
-    , button [ onClick Increment ] [ text "+" ]
+  div [ class "content" ]
+    [ div [ class "page-title" ] [ text "The connor.fun Crew" ] 
+    , div [ class "important-people-title"] [ text "Meet the Cofounders" ] 
+    , div [ class "important-people" ] (viewProfiles cofounders) 
+    , div [ class "team-people-title" ] [ text "Meet the Team" ]
+    , div [ class "team-people"] (viewProfiles members)
     ]
+
+  
+
+
+profileMsgToMsg : Html Profile.Msg -> Html Msg
+profileMsgToMsg = 
+  Html.map (\msg -> ProfileMsg msg)
+
+viewProfiles : List Profile -> List (Html Msg)
+viewProfiles = 
+  List.map (profileMsgToMsg << Profile.view)
