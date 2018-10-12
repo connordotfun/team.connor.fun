@@ -11,8 +11,8 @@ type alias Profile =
   , personTitle: String
   }
 
-view : Profile -> (Profile -> msg) -> (Profile -> msg) -> (Profile -> msg) -> Html msg
-view profile enterHandler exitHandler clickHandler = 
+view : (Profile -> msg) -> (Profile -> msg) -> (Profile -> msg) -> Profile -> Html msg
+view enterHandler exitHandler clickHandler profile = 
   div
     [ class "profile"
     , onMouseEnter (enterHandler profile) 

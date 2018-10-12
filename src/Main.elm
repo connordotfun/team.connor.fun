@@ -77,4 +77,4 @@ viewBio selectedProfile =
 
 viewProfiles : List Profile -> List (Html Msg)
 viewProfiles = 
-  List.map (\p -> Profile.view p (ProfileEnter) (ProfileLeave) (ProfileClicked))
+  List.map (Profile.view (ProfileEnter) (ProfileLeave) (ProfileClicked))
