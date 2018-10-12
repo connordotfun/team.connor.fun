@@ -13,4 +13,5 @@ members =
   [ Profile "maxine" "Maxine Hartnett" "Chief E Officer"
   , Profile "ethan" "Ethan Hunter" "Chief Expostulation Officer"
   , Profile "ellen" "Ellen Roberts" "Chief Ellen Officer"
+  , Profile "nietzsche" "Friedrich Nietzsche" "Chief Existentialism Officer"
   ]
