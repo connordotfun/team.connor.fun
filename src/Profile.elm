@@ -11,19 +11,13 @@ type alias Profile =
   , personTitle: String
   }
 
-
-type Msg 
-  = StartHover Profile
-  | EndHover Profile
-  | Clicked Profile 
-
-view : Profile -> (() -> Msg) -> Html Msg
-view profile clickHandler = 
+view : Profile -> (Profile -> msg) -> (Profile -> msg) -> (Profile -> msg) -> Html msg
+view profile enterHandler exitHandler clickHandler = 
   div
     [ class "profile"
-    , onMouseEnter (StartHover profile) 
-    , onMouseLeave (EndHover profile)
-    , onClick (Clicked profile)
+    , onMouseEnter (enterHandler profile) 
+    , onMouseLeave (exitHandler profile)
+    , onClick (clickHandler profile)
     ]
     [ div [class "profile-inner"] 
       [ div [ class "profile-image" ][ img [src "res/connor-nologo.jpg"][] ]
@@ -32,14 +26,4 @@ view profile clickHandler =
       ]
     ]
 
-  
-update : Profile -> Msg -> Profile
-update profile msg =
-  case msg of 
-    StartHover p ->
-      profile
-    EndHover p ->
-      profile
-    Clicked p ->
-      profile -- hmmm, this is illegal state...
   

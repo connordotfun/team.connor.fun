@@ -21,24 +21,40 @@ type alias Model =
 
 init : Model
 init =
-  {cofounders = cofounders, members = members}
+  {cofounders = cofounders, members = members, selectedProfile = Nothing}
 
 
 -- UPDATE
 
 type Msg 
-  = ProfileMsg Profile.Msg 
+  = ProfileClicked Profile
+  | ProfileEnter Profile
+  | ProfileLeave Profile
+  | BioExit
 
 update : Msg -> Model -> Model
 update msg model =
-  model
+  case msg of
+    ProfileClicked p ->
+      case model.selectedProfile of --if the user clicks anywhere off the bio, they are asking for exit
+        Just _ ->
+          update BioExit model
+        Nothing ->
+          {model | selectedProfile = Just p}
+    
+    BioExit ->
+      {model | selectedProfile = Nothing}
+
+    _ ->
+      model
 
 -- VIEW
 
 view : Model -> Html Msg
 view model =
   div [ class "content" ]
-    [ div [ class "page-title" ] [ text "The connor.fun Crew" ] 
+    [ viewBio model.selectedProfile
+    , div [ class "page-title" ] [ text "The connor.fun Crew" ] 
     , div [ class "important-people-title"] [ text "Meet the Cofounders" ] 
     , div [ class "important-people" ] (viewProfiles cofounders) 
     , div [ class "team-people-title" ] [ text "Meet the Team" ]
@@ -50,17 +66,20 @@ viewBio : Maybe Profile -> Html Msg
 viewBio selectedProfile =
   case selectedProfile of
     Just profile ->
-      div [ class "bio-container", style "visibility" "visible" ] [ (text "this is a bio for " ++ profile.personName) ]
+
+      div [class "bio-container-container"]
+      [ div [ class "bio-container-background"] []
+      , div [ class "bio-container", style "visibility" "visible" ] 
+          [ div [class "bio-close-btn", onClick BioExit] [text "×"]
+
+          ]
+      ]
+      
     Nothing ->
       div [ class "bio-container", style "visibility" "hidden" ] []
-
-
-profileMsgToMsg : Html Profile.Msg -> Html Msg
-profileMsgToMsg = 
-  Html.map (\msg -> ProfileMsg msg)
 
 
 
 viewProfiles : List Profile -> List (Html Msg)
 viewProfiles = 
-  List.map (profileMsgToMsg << Profile.view)
+  List.map (\p -> Profile.view p (ProfileEnter) (ProfileLeave) (ProfileClicked))

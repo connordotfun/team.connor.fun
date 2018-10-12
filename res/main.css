@@ -83,6 +83,39 @@
 }
 
 
+.bio-container {
+  width: 85%;
+  height: 85%;
+  position: fixed;
+  left: 50%;
+  margin-left: -42.5%;
+  margin-top: 15px;
+  background-color: white;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+  border-radius: 15px 50px 15px;
+  opacity: 100%;
+}
+
+.bio-container-background {
+  opacity: .5;
+  position: fixed;
+  width: 120vw;
+  height: 120vh;
+  padding: 0;
+  margin: 0;
+  background-color: gray;
+  top: -10vh;
+  left: -10vw;
+}
+
+.bio-close-btn {
+  font-size: 40px;
+  text-align: right;
+  padding-right: 15px;
+}
+
+
+
 /*TODO: In mobile landscape mode, use a two column view */
 @media only screen and (max-width: 640px), only screen and (max-height: 640px) {
   .team-people {
