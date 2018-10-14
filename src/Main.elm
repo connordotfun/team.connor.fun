@@ -76,12 +76,27 @@ update msg model =
         ({model | selectedProfile = Just profileInfo}, cmd)
     
     NewBioFetched name rb ->
-      ({model | bios = Dict.insert name rb model.bios}, Cmd.none)
+      ({model 
+      | bios = Dict.insert name rb model.bios
+      , selectedProfile = updateSelectedProfile name rb model.selectedProfile
+      }
+      , Cmd.none)
     BioExit ->
       ({model | selectedProfile = Nothing}, Cmd.none)
 
     _ ->
       (model, Cmd.none)
+
+
+updateSelectedProfile : String -> RemoteBio -> Maybe ProfileInfo -> Maybe ProfileInfo
+updateSelectedProfile name rb selected =
+  case selected of
+    Just profile -> 
+      if profile.profile.imageName == name then 
+        Just (ProfileInfo profile.profile rb)
+      else
+        selected
+    Nothing -> Nothing
 
 
 selectProfileInfo : Profile -> Dict String RemoteBio -> (ProfileInfo, Cmd Msg)
@@ -108,6 +123,7 @@ selectProfileBio name bios =
 
 view : Model -> Html Msg
 view model =
+  Debug.log "rerendering"
   div [ class "content" ]
     [ viewBio model.selectedProfile
     , div [ class "page-title" ] [ text "The connor.fun Crew" ] 
