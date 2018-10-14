@@ -8,7 +8,12 @@ import List
 
 
 main =
-  Browser.sandbox { init = init, update = update, view = view }
+  Browser.element 
+    { init = init
+    , update = update
+    , view = view
+    , subscriptions = subscriptions
+    }
 
 
 -- MODEL
@@ -19,9 +24,14 @@ type alias Model =
   , selectedProfile: Maybe Profile
   }
 
-init : Model
-init =
-  {cofounders = cofounders, members = members, selectedProfile = Just (Profile "foo" "foo" "foo")}
+init : () -> (Model, Cmd Msg)
+init _ =
+  ({cofounders = cofounders, members = members, selectedProfile = Nothing}, Cmd.none)
+
+
+subscriptions : Model -> Sub Msg
+subscriptions model =
+    Sub.none
 
 
 -- UPDATE
@@ -32,17 +42,17 @@ type Msg
   | ProfileLeave Profile
   | BioExit
 
-update : Msg -> Model -> Model
+update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
   case msg of
     ProfileClicked p ->
-      {model | selectedProfile = Just p}
+      ({model | selectedProfile = Just p}, Cmd.none)
     
     BioExit ->
-      {model | selectedProfile = Nothing}
+      ({model | selectedProfile = Nothing}, Cmd.none)
 
     _ ->
-      model
+      (model, Cmd.none)
 
 -- VIEW
 
