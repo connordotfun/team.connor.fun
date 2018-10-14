@@ -5,7 +5,10 @@ import Html.Attributes exposing (class, style, src)
 import Profile exposing (Profile)
 import TeamMembers exposing (cofounders, members)
 import List
+import Bio exposing(..)
+import Dict exposing (Dict)
 
+import Debug
 
 main =
   Browser.element 
@@ -18,15 +21,34 @@ main =
 
 -- MODEL
 
+type alias ProfileInfo =
+  { profile: Profile
+  , bio: RemoteBio
+  }
+
+
 type alias Model = 
   { cofounders: List Profile
   , members: List Profile
-  , selectedProfile: Maybe Profile
+  , selectedProfile: Maybe ProfileInfo
+  , bios: Dict String RemoteBio
   }
 
 init : () -> (Model, Cmd Msg)
 init _ =
-  ({cofounders = cofounders, members = members, selectedProfile = Nothing}, Cmd.none)
+  let
+    model = 
+      { cofounders = cofounders
+      , members = members
+      , selectedProfile = Nothing
+      , bios = generateInitialBios (List.append cofounders members)
+      }
+    in
+  (model, Cmd.none)
+
+generateInitialBios: List Profile -> Dict String RemoteBio
+generateInitialBios profiles = 
+  Dict.fromList (List.map (\p -> (p.imageName, Bio.NotRequested)) profiles)
 
 
 subscriptions : Model -> Sub Msg
@@ -41,18 +63,46 @@ type Msg
   | ProfileEnter Profile
   | ProfileLeave Profile
   | BioExit
+  | NewBioFetched String RemoteBio
+
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
   case msg of
     ProfileClicked p ->
-      ({model | selectedProfile = Just p}, Cmd.none)
+      let
+        (profileInfo, cmd) = selectProfileInfo p model.bios
+      in
+        ({model | selectedProfile = Just profileInfo}, cmd)
     
+    NewBioFetched name rb ->
+      ({model | bios = Dict.insert name rb model.bios}, Cmd.none)
     BioExit ->
       ({model | selectedProfile = Nothing}, Cmd.none)
 
     _ ->
       (model, Cmd.none)
+
+
+selectProfileInfo : Profile -> Dict String RemoteBio -> (ProfileInfo, Cmd Msg)
+selectProfileInfo profile bios =
+  let
+    (remoteBio, cmd) = selectProfileBio profile.imageName bios
+  in
+    (ProfileInfo profile remoteBio, cmd)
+
+
+selectProfileBio : String -> Dict String RemoteBio -> (RemoteBio, Cmd Msg)
+selectProfileBio name bios =
+  case Dict.get name bios of
+    Just rb -> 
+      case rb of
+        NotRequested ->
+          (Fetching, fetchBio name (NewBioFetched name))
+        _ -> (rb, Cmd.none)
+
+    Nothing -> 
+      (NotRequested, Cmd.none) -- it's a bit bad that this state can happen
 
 -- VIEW
 
@@ -68,17 +118,17 @@ view model =
     ]
 
 
-viewBio : Maybe Profile -> Html Msg
+viewBio : Maybe ProfileInfo -> Html Msg
 viewBio selectedProfile =
   case selectedProfile of
-    Just profile ->
+    Just profileInfo ->
       div [class "bio-container-container"]
       [ div [ class "bio-container-background", onClick BioExit] []
       , div [ class "bio-container", style "visibility" "visible" ] 
           [ div [class "bio-close-btn", onClick BioExit] [text "×"]
           , img [class "bio-image", src "res/connor-nologo.jpg"][]
-          , viewBioInfo profile
-          , viewBioText profile
+          , viewBioInfo profileInfo.profile
+          , viewBioText profileInfo.bio
           ]
       ]
       
@@ -94,9 +144,12 @@ viewBioInfo p =
     , div [class "bio-tags"] [text "Person, Worker, Boring Person"]
     ]
 
-viewBioText : Profile -> Html Msg
-viewBioText p =
-  div [ class "bio-text" ] [text "these are the voyages of the starship enterprise on it's ongoing mission to explore stange new worlds and seek out new life and civilizations"]
+viewBioText : RemoteBio -> Html Msg
+viewBioText bio =
+  div [ class "bio-text" ] 
+    [ Bio.viewText bio
+
+    ]
 
 
 
